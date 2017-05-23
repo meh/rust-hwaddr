@@ -1,0 +1,18 @@
+[package]
+name    = "hwaddr"
+version = "0.1.0"
+
+authors = ["meh. <meh@schizofreni.co>"]
+license = "WTFPL"
+
+description = "MAC address handling."
+repository  = "https://github.com/meh/rust-hwaddr"
+keywords    = ["address", "mac", "hw", "network"]
+
+[dependencies]
+phf = "0.7"
+
+[build-dependencies]
+reqwest     = "0.6"
+regex       = "0.2"
+phf_codegen = "0.7"
