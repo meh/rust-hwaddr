@@ -25,6 +25,11 @@ pub struct HwAddr {
 }
 
 impl HwAddr {
+	/// Get the octets composing the MAC address.
+	pub fn octets(&self) -> [u8; 6] {
+		self.value
+	}
+
 	/// Checks if the address is broadcast.
 	pub fn is_broadcast(&self) -> bool {
 		self.value == [0xff, 0xff, 0xff, 0xff, 0xff, 0xff]
