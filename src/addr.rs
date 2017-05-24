@@ -16,7 +16,7 @@ use std::fmt;
 use std::str::FromStr;
 use std::num::ParseIntError;
 
-use producer::{DATABASE, Producer};
+use producer::{self, Producer};
 
 /// A MAC address.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -26,18 +26,44 @@ pub struct HwAddr {
 
 impl HwAddr {
 	/// Get the octets composing the MAC address.
+	///
+	/// # Example
+	///
+	/// ```
+	/// use hwaddr::HwAddr;
+	///
+	/// assert_eq!(
+	/// 	"00-14-22-01-23-45".parse::<HwAddr>().unwrap().octets(),
+	/// 	[0, 20, 34, 1, 35, 69]);
+	/// ```
 	pub fn octets(&self) -> [u8; 6] {
 		self.value
 	}
 
 	/// Checks if the address is broadcast.
+	///
+	/// # Example
+	/// ```
+	/// use hwaddr::HwAddr;
+	///
+	/// assert!("FF:FF:FF:FF:FF:FF".parse::<HwAddr>().unwrap().is_broadcast());
+	/// assert!(!"00:00:00:00:00:00".parse::<HwAddr>().unwrap().is_broadcast());
+	/// ```
 	pub fn is_broadcast(&self) -> bool {
 		self.value == [0xff, 0xff, 0xff, 0xff, 0xff, 0xff]
 	}
 
 	/// Tries to find the producer for this MAC address.
 	pub fn producer(&self) -> Option<&Producer> {
-		DATABASE.get(&self.value[0 .. 3])
+		#[cfg(feature = "database")]
+		{
+			producer::DATABASE.get(&self.value[0 .. 3])
+		}
+
+		#[cfg(not(feature = "database"))]
+		{
+			None
+		}
 	}
 }
 
@@ -47,7 +73,7 @@ impl FromStr for HwAddr {
 	fn from_str(value: &str) -> Result<Self, Self::Err> {
 		let mut result = [0; 6];
 
-		for (i, byte) in value.split(":").enumerate() {
+		for (i, byte) in value.split(|c| c == ':' || c == '-').enumerate() {
 			if i > 5 {
 				u8::from_str_radix("error", 10)?;
 			}

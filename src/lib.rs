@@ -12,6 +12,8 @@
 //
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
+///! MAC address handling.
+
 extern crate phf;
 
 pub mod producer;

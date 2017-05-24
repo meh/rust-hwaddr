@@ -27,6 +27,10 @@ use url::Url;
 use regex::Regex;
 
 fn main() {
+	if env::var("CARGO_FEATURE_DATABASE").is_err() {
+		return;
+	}
+
 	let mut content = String::new();
 
 	if let Ok(value) = env::var("HWADDR_DATABASE") {

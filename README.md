@@ -1,11 +1,12 @@
 HwAddr
 ======
-Hardware addresses with access to the producer database.
+Hardware addresses with optional access to the producer database.
 
 Building
 --------
-Building requires either providing a local database or letting the builder
-download one.
+Optionally the database of producers to find out who produces a certain MAC
+address can be compiled in by enabling the `database` feature. Keep in mind
+this database adds up to the final binary around 7MB.
 
 By default a database is provided and used, otherwise there are a couple options.
 

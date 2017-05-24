@@ -15,17 +15,28 @@
 /// The producer for a specific MAC address range.
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub struct Producer {
-	pub prefix:  [u8; 3],
-	pub name:    &'static str,
+	/// The MAC address prefix they were assigned.
+	pub prefix: [u8; 3],
+
+	/// The name of the company.
+	pub name: &'static str,
+
+	/// The address for the company.
 	pub address: Address,
 }
 
 /// The address of the `Producer`.
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub struct Address {
-	pub street:  &'static str,
-	pub city:    &'static str,
+	/// The street.
+	pub street: &'static str,
+
+	/// The city.
+	pub city: &'static str,
+
+	/// The country.
 	pub country: &'static str,
 }
 
+#[cfg(feature = "database")]
 include!(concat!(env!("OUT_DIR"), "/database.rs"));
