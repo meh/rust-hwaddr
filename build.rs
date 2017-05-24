@@ -13,6 +13,7 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 extern crate reqwest;
+extern crate url;
 extern crate regex;
 extern crate phf_codegen;
 
@@ -22,6 +23,7 @@ use std::fs::File;
 use std::path::Path;
 use std::collections::HashSet;
 
+use url::Url;
 use regex::Regex;
 
 fn main() {
@@ -30,9 +32,16 @@ fn main() {
 	if let Ok(value) = env::var("HWADDR_DATABASE") {
 		File::open(value).unwrap().read_to_string(&mut content).unwrap();
 	}
+	else if let Ok(url) = env::var("HWADDR_DOWNLOAD") {
+		if Url::parse(&url).is_ok() {
+			reqwest::get(&url).unwrap()
+		}
+		else {
+			reqwest::get("http://standards.ieee.org/develop/regauth/oui/oui.txt").unwrap()
+		}.read_to_string(&mut content).unwrap();
+	}
 	else {
-		reqwest::get("http://standards.ieee.org/develop/regauth/oui/oui.txt").unwrap()
-			.read_to_string(&mut content).unwrap();
+		File::open("database.txt").unwrap().read_to_string(&mut content).unwrap();
 	}
 
 	let     path    = Path::new(&env::var("OUT_DIR").unwrap()).join("database.rs");
