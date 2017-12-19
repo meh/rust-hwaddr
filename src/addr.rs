@@ -19,7 +19,7 @@ use std::num::ParseIntError;
 use producer::{self, Producer};
 
 /// A MAC address.
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct HwAddr {
 	value: [u8; 6]
 }
