@@ -19,7 +19,7 @@ use std::num::ParseIntError;
 use producer::{self, Producer};
 
 /// A MAC address.
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Debug, Hash)]
 pub struct HwAddr {
 	value: [u8; 6]
 }
@@ -57,7 +57,7 @@ impl HwAddr {
 	pub fn producer(&self) -> Option<&Producer> {
 		#[cfg(feature = "database")]
 		{
-			producer::DATABASE.get(&self.value[0 .. 3])
+			producer::DATABASE.get(&self.value[0..3])
 		}
 
 		#[cfg(not(feature = "database"))]
@@ -81,48 +81,49 @@ impl FromStr for HwAddr {
 			result[i] = u8::from_str_radix(byte, 16)?;
 		}
 
-		Ok(HwAddr {
-			value: result
-		})
+		Ok(HwAddr { value: result })
 	}
 }
 
 impl From<u32> for HwAddr {
 	fn from(value: u32) -> HwAddr {
-		let mut value  = value;
+		let mut value = value;
 		let mut result = [0u8; 6];
 
-		for i in 0 .. 6 {
-			result[i]   = (value & 0xff) as u8;
-			value     >>= 8;
+		for i in 0..6 {
+			result[i] = (value & 0xff) as u8;
+			value >>= 8;
 		}
 
-		HwAddr {
-			value: result
-		}
+		HwAddr { value: result }
 	}
 }
 
 impl From<[u8; 6]> for HwAddr {
 	fn from(value: [u8; 6]) -> HwAddr {
-		HwAddr {
-			value: value
-		}
+		HwAddr { value: value }
 	}
 }
 
 impl<'a> From<&'a [u8]> for HwAddr {
 	fn from(value: &'a [u8]) -> HwAddr {
 		HwAddr {
-			value: [value[0], value[1], value[2], value[3], value[4], value[5]]
+			value: [value[0], value[1], value[2], value[3], value[4], value[5]],
 		}
 	}
 }
 
 impl fmt::Display for HwAddr {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{:X}:{:X}:{:X}:{:X}:{:X}:{:X}",
-			self.value[0], self.value[1], self.value[2],
-			self.value[3], self.value[4], self.value[5])
+		write!(
+			f,
+			"{:X}:{:X}:{:X}:{:X}:{:X}:{:X}",
+			self.value[0],
+			self.value[1],
+			self.value[2],
+			self.value[3],
+			self.value[4],
+			self.value[5]
+		)
 	}
 }
