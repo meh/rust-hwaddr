@@ -16,7 +16,9 @@ use std::fmt;
 use std::str::FromStr;
 use std::num::ParseIntError;
 
-use producer::{self, Producer};
+#[cfg(feature = "database")]
+use producer;
+use producer::Producer;
 
 /// A MAC address.
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
@@ -121,8 +123,19 @@ impl<'a> From<&'a [u8]> for HwAddr {
 
 impl fmt::Display for HwAddr {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{:X}:{:X}:{:X}:{:X}:{:X}:{:X}",
+		write!(f, "{:02X}:{:02X}:{:02X}:{:02X}:{:02X}:{:02X}",
 			self.value[0], self.value[1], self.value[2],
 			self.value[3], self.value[4], self.value[5])
+	}
+}
+
+#[cfg(test)]
+mod test {
+	use super::HwAddr;
+
+	#[test]
+	fn display() {
+		assert_eq!("00:41:D0:24:00:0B",
+			"00:41:D0:24:00:0B".parse::<HwAddr>().unwrap().to_string());
 	}
 }
