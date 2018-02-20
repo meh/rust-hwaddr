@@ -13,7 +13,7 @@ keywords    = ["address", "mac", "hw", "network"]
 phf = "0.7"
 
 [build-dependencies]
-reqwest     = "0.6"
+reqwest     = "0.8"
 url         = "1.4"
 regex       = "0.2"
 phf_codegen = "0.7"
