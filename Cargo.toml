@@ -1,6 +1,7 @@
 [package]
 name    = "hwaddr"
 version = "0.1.5"
+edition = "2018"
 
 authors = ["meh. <meh@schizofreni.co>"]
 license = "WTFPL"
@@ -10,13 +11,15 @@ repository  = "https://github.com/meh/rust-hwaddr"
 keywords    = ["address", "mac", "hw", "network"]
 
 [dependencies]
-phf = "0.7"
+phf = "0.8"
 
 [build-dependencies]
-reqwest     = "0.9"
-url         = "1.4"
-regex       = "1.0"
-phf_codegen = "0.7"
+smol        = "0.1"
+smol-potat  = { version = "0.3", features = ["auto"] }
+reqwest     = "0.10"
+url         = "2"
+regex       = "1"
+phf_codegen = "0.8"
 
 [features]
 database = []

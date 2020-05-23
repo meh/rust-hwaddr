@@ -26,7 +26,8 @@ use std::collections::HashSet;
 use url::Url;
 use regex::Regex;
 
-fn main() {
+#[smol_potat::main]
+async fn main() {
 	if env::var("CARGO_FEATURE_DATABASE").is_err() {
 		return;
 	}
@@ -37,12 +38,12 @@ fn main() {
 		File::open(value).unwrap().read_to_string(&mut content).unwrap();
 	}
 	else if let Ok(url) = env::var("HWADDR_DOWNLOAD") {
-		if Url::parse(&url).is_ok() {
-			reqwest::get(&url).unwrap()
+		content.push_str(&if Url::parse(&url).is_ok() {
+			reqwest::get(&url).await.unwrap()
 		}
 		else {
-			reqwest::get("http://standards.ieee.org/develop/regauth/oui/oui.txt").unwrap()
-		}.read_to_string(&mut content).unwrap();
+			reqwest::get("http://standards.ieee.org/develop/regauth/oui/oui.txt").await.unwrap()
+		}.text().await.unwrap());
 	}
 	else {
 		File::open("database.txt").unwrap().read_to_string(&mut content).unwrap();
@@ -88,6 +89,6 @@ fn main() {
 		}
 	}
 
-	builder.build(&mut file).unwrap();
+	write!(&mut file, "{}", builder.build()).unwrap();
 	write!(&mut file, ";\n").unwrap();
 }

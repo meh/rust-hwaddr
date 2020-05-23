@@ -17,8 +17,7 @@ use std::str::FromStr;
 use std::num::ParseIntError;
 
 #[cfg(feature = "database")]
-use producer;
-use producer::Producer;
+use crate::producer::{self, Producer};
 
 /// A MAC address.
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
@@ -56,6 +55,7 @@ impl HwAddr {
 	}
 
 	/// Tries to find the producer for this MAC address.
+	#[cfg(feature = "database")]
 	pub fn producer(&self) -> Option<&Producer> {
 		#[cfg(feature = "database")]
 		{

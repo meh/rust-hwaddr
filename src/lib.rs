@@ -14,8 +14,6 @@
 
 ///! MAC address handling.
 
-extern crate phf;
-
 pub mod producer;
 pub use producer::Producer;
 
