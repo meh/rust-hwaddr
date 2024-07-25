@@ -11,7 +11,7 @@ repository  = "https://github.com/meh/rust-hwaddr"
 keywords    = ["address", "mac", "hw", "network"]
 
 [dependencies]
-phf = "0.8"
+phf = { version = "0.8", optional = true }
 
 [build-dependencies]
 smol        = { version = "1.0", optional = true }
@@ -21,4 +21,4 @@ regex       = { version = "1", optional = true }
 phf_codegen = { version = "0.8", optional = true }
 
 [features]
-database = ["smol", "reqwest", "url", "regex", "phf_codegen"]
+database = ["smol", "reqwest", "url", "regex", "phf", "phf_codegen"]

@@ -14,11 +14,11 @@
 
 use std::env;
 
-#[cfg(features = "database")]
+#[cfg(feature = "database")]
 use std::{io::{Read, Write, BufWriter}, fs::File, path::Path, collections::HashSet};
-#[cfg(features = "database")]
+#[cfg(feature = "database")]
 use url::Url;
-#[cfg(features = "database")]
+#[cfg(feature = "database")]
 use regex::Regex;
 
 fn main() {
@@ -26,7 +26,7 @@ fn main() {
 		return;
 	}
 
-	#[cfg(features = "database")]
+	#[cfg(feature = "database")]
 	smol::block_on(async {
 		let mut content = String::new();
 
